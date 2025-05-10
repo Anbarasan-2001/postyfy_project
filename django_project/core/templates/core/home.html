@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Recent Posts</h2>
+<div class="row">
+  {% for post in posts %}
+  <div class="col-md-4 mb-4">
+    <div class="card shadow-sm h-100">
+      {% if post.image %}
+        <img src="{{ post.image.url }}" class="card-img-top img-fluid" alt="Post by {{ post.user.username|default:'User' }}">
+      {% else %}
+        <img src="{% static 'images/placeholder.png' %}" class="card-img-top img-fluid" alt="No image available">
+      {% endif %}
+      <div class="card-body d-flex flex-column">
+        <p class="card-text"><strong>Posted by:</strong> {{ post.user.username }}</p>
+        <p class="card-text"><strong>Likes:</strong> {{ post.total_likes }}</p>
+
+        <form method="post" action="{% url 'like_image' post.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Like</button>
+        </form>
+
+        <div class="mt-auto">
+          {% if user.is_authenticated %}
+            {% if user not in post.likes.all %}
+              <a href="{% url 'like_image' post.id %}" class="btn btn-outline-primary btn-sm">Like</a>
+            {% else %}
+              <span class="badge bg-success">Liked</span>
+            {% endif %}
+          {% else %}
+            <small class="text-muted">Login to like this post</small>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+    <p>No posts available.</p>
+  {% endfor %}
+</div>
+{% endblock %}

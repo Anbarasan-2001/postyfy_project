@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome, {{ user.username }}</h2>
+
+<h3>Create a Post</h3>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+<h3>Your Posts</h3>
+{% for post in posts %}
+  <div class="card mt-3">
+    <img src="{{ post.image.url }}" class="card-img-top" alt="Post image">
+    <div class="card-body">
+      <p class="card-text">{{ post.caption }}</p>
+      <p><strong>Likes:</strong> {{ post.likes }}</p>
+    </div>
+  </div>
+{% empty %}
+  <p>You haven't uploaded any posts yet.</p>
+{% endfor %}
+{% endblock %}
