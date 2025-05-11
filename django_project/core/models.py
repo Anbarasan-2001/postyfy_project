@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 class Post(models.Model):
-    image = models.ImageField(upload_to='post_images/', default='default.jpg')
-    caption = models.TextField(default='')
-    created_at = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    likes = models.PositiveIntegerField(default=0)  # <-- Add this line
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    caption = models.TextField()
+    image = models.ImageField(upload_to='posts/')
+    likes = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Post by {self.user.username}"
@@ -23,9 +23,10 @@ class Profile(models.Model):
 
 
 class Image(models.Model):
-    title = models.CharField(max_length=255)  # Title for the image
-    image = models.ImageField(upload_to='images/')  # The image itself
-    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the image is created
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # <-- Add this line
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='images/')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title

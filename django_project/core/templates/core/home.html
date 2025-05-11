@@ -1,44 +1,114 @@
-{% extends 'core/base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Postyfy{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            background-color: #cbd5db;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding-top: 8px;
+        }
 
-{% block title %}Home{% endblock %}
+        .navbar {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid #ffffff20;
+        }
 
-{% block content %}
-<h2 class="mb-4">Recent Posts</h2>
-<div class="row">
-  {% for post in posts %}
-  <div class="col-md-4 mb-4">
-    <div class="card shadow-sm h-100">
-      {% if post.image %}
-        <img src="{{ post.image.url }}" class="card-img-top img-fluid" alt="Post by {{ post.user.username|default:'User' }}">
-      {% else %}
-        <img src="{% static 'images/placeholder.png' %}" class="card-img-top img-fluid" alt="No image available">
-      {% endif %}
-      <div class="card-body d-flex flex-column">
-        <p class="card-text"><strong>Posted by:</strong> {{ post.user.username }}</p>
-        <p class="card-text"><strong>Likes:</strong> {{ post.total_likes }}</p>
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff !important;
+        }
 
-        <form method="post" action="{% url 'like_image' post.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Like</button>
-        </form>
+        .navbar-nav .nav-link {
+            color: #f8f9fa !important;
+            margin-left: 15px;
+            transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
 
-        <div class="mt-auto">
-          {% if user.is_authenticated %}
-            {% if user not in post.likes.all %}
-              <a href="{% url 'like_image' post.id %}" class="btn btn-outline-primary btn-sm">Like</a>
-            {% else %}
-              <span class="badge bg-success">Liked</span>
-            {% endif %}
-          {% else %}
-            <small class="text-muted">Login to like this post</small>
-          {% endif %}
+        .navbar-nav .nav-link:hover {
+            color: #ffc107 !important;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .hero {
+            background: url("{% static 'images/laptop.jpg' %}") no-repeat center center/cover;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-text {
+            color: white;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 300;
+        }
+
+        .hero-text h1 span {
+            font-weight: 700;
+            color: #a3b3c2;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        .hero-text .btn-primary {
+            margin-top: 30px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="#">Postyfy</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-  {% empty %}
-    <p>No posts available.</p>
-  {% endfor %}
-</div>
-{% endblock %}
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Make it <span>fresh.</span></h1>
+            <p>Wellcome to the <h4>Postyfy</h4></p>
+        </div>
+    </section>
+</body>
+</html>
